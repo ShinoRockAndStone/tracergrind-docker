@@ -18,10 +18,10 @@ docker run -it -v ${PWD}:/home texttrace home/<filename>.trace home/<filename>.t
 To create a sample trace with the provided sample file:
 ```bash
 cd sample
-gcc -o strcmp strcmp.c
-docker run --rm -it -v ${PWD}:/home tracergrind -d -d --tool=tracergrind --output=/home/strcmp.trace /home/strcmp
-docker run --rm -it -v ${PWD}:/home texttrace strcmp.trace strcmp.texttrace
-readelf -Wa strcmp | grep -e .text -e main > strcmp.elf
+gcc -o string-compare-strcmp string-compare-strcmp.c
+docker run --rm -it -v ${PWD}:/home tracergrind -d -d --tool=tracergrind --output=/home/string-compare-strcmp.trace /home/string-compare-strcmp
+docker run --rm -it -v ${PWD}:/home texttrace string-compare-strcmp.trace string-compare-strcmp.texttrace
+readelf -Wa string-compare-strcmp | grep -e .text -e main > string-compare-strcmp.elf
 ```
 
 ## Helper script
