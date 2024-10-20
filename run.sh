@@ -22,6 +22,7 @@ COMPILED_FILENAME="${RAWNAME}.out"
 TRACE_FILENAME="${RAWNAME}.trace"
 TEXTTRACE_FILENAME="${RAWNAME}.texttrace"
 SYMBOLS_FILENAME="${RAWNAME}.elf"
+LOGS_FILENAME="${RAWNAME}.logs"
 
 # Check if a file was selected
 if [[ -z "$SOURCE_FILE" ]]; then
@@ -32,6 +33,6 @@ fi
 mkdir -p "$TRACE_DIR/"
 cp "$SOURCE_FILE" "$TRACE_DIR/$BASENAME"
 gcc -o "$TRACE_DIR/$COMPILED_FILENAME" "$TRACE_DIR/$BASENAME"
-docker run --rm -it -v "$TRACE_DIR":/home tracergrind -d -d --tool=tracergrind --output="/home/$TRACE_FILENAME" "/home/$COMPILED_FILENAME"
+docker run --rm -it -v "$TRACE_DIR":/home tracergrind -d -d --tool=tracergrind --output="/home/$TRACE_FILENAME" "/home/$COMPILED_FILENAME" | tee "$TRACE_DIR/$LOGS_FILENAME"
 docker run --rm -it -v "$TRACE_DIR":/home texttrace "$TRACE_FILENAME" "$TEXTTRACE_FILENAME"
 readelf -Wa "$TRACE_DIR/$COMPILED_FILENAME" | grep -e .text -e main > "$TRACE_DIR/$SYMBOLS_FILENAME"
