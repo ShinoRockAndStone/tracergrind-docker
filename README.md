@@ -19,8 +19,8 @@ To create a sample trace with the provided sample file:
 ```bash
 cd sample
 gcc -o string-compare-strcmp string-compare-strcmp.c
-docker run --rm -it -v ${PWD}:/home tracergrind -d -d --tool=tracergrind --output=/home/string-compare-strcmp.trace /home/string-compare-strcmp
-docker run --rm -it -v ${PWD}:/home texttrace string-compare-strcmp.trace string-compare-strcmp.texttrace
+docker run --rm -it --ulimit nofile=262144:262144 -v ${PWD}:/home tracergrind -d -d --tool=tracergrind --output=/home/string-compare-strcmp.trace /home/string-compare-strcmp
+docker run --rm -it --ulimit nofile=262144:262144 -v ${PWD}:/home texttrace string-compare-strcmp.trace string-compare-strcmp.texttrace
 readelf -Wa string-compare-strcmp | grep -e .text -e main > string-compare-strcmp.elf
 ```
 

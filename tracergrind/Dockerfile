@@ -1,4 +1,4 @@
-FROM debian:stable
+FROM debian:bullseye
 
 # Update package manager
 RUN apt-get update
@@ -29,7 +29,7 @@ RUN patch -p0 < valgrind-3.15.0.diff
 WORKDIR valgrind-3.15.0/
 RUN ./autogen.sh
 RUN ./configure --prefix=/usr
-RUN make -j4
+RUN make -j8
 RUN make install
 
 # Run it as if it were valgrind
