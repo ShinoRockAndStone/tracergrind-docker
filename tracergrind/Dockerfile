@@ -17,7 +17,8 @@ RUN wget 'https://github.com/SideChannelMarvels/Tracer/archive/refs/heads/master
 RUN unzip master.zip
 
 # Get Valgrind 3.15.0
-RUN wget 'https://sourceware.org/ftp/valgrind/valgrind-3.15.0.tar.bz2'
+# RUN wget 'https://sourceware.org/ftp/valgrind/valgrind-3.15.0.tar.bz2'
+COPY valgrind-3.15.0.tar.bz2 .
 RUN tar xf valgrind-3.15.0.tar.bz2
 
 # Apply the patch
