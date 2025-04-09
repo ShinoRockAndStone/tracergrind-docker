@@ -1,5 +1,5 @@
 SRC=exemplo.c
-RAWNAME=$(basename $(SRC) .c)
+RAWNAME=$(basename $(SRC))
 TRACE_DIR=$(RAWNAME)-traces
 ABS_TRACE_DIR=$(shell realpath $(TRACE_DIR))
 
