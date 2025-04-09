@@ -30,7 +30,7 @@ RUN patch -p0 < valgrind-3.15.0.diff
 WORKDIR valgrind-3.15.0/
 RUN ./autogen.sh
 RUN ./configure --prefix=/usr
-RUN make -j8
+RUN make
 RUN make install
 
 # Run it as if it were valgrind
