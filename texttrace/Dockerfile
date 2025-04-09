@@ -18,7 +18,7 @@ RUN unzip master.zip
 
 # Build and install texttrace
 WORKDIR Tracer-master/TracerGrind/texttrace/
-RUN make -j4
+RUN make
 RUN make install
 
 WORKDIR /home
