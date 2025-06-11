@@ -13,8 +13,9 @@ RUN apt-get update
 RUN apt-get install --yes --no-install-recommends gcc-multilib
 
 # Get Tracer
-RUN wget 'https://github.com/SideChannelMarvels/Tracer/archive/refs/heads/master.zip'
-RUN unzip master.zip
+# RUN wget 'https://github.com/SideChannelMarvels/Tracer/archive/refs/heads/master.zip'
+COPY ../Tracer-master.zip .
+RUN unzip Tracer-master.zip
 
 # Build and install texttrace
 WORKDIR Tracer-master/TracerGrind/texttrace/

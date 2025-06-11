@@ -13,8 +13,9 @@ RUN apt-get update
 RUN apt-get install --yes --no-install-recommends gcc-multilib
 
 # Get Tracer
-RUN wget 'https://github.com/SideChannelMarvels/Tracer/archive/refs/heads/master.zip'
-RUN unzip master.zip
+# RUN wget 'https://github.com/SideChannelMarvels/Tracer/archive/refs/heads/master.zip'
+COPY ../Tracer-master.zip .
+RUN unzip Tracer-master.zip
 
 # Get Valgrind 3.15.0
 # RUN wget 'https://sourceware.org/ftp/valgrind/valgrind-3.15.0.tar.bz2'
