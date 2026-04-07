@@ -3,7 +3,7 @@ FROM debian:bullseye
 # Evita prompts interativos
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Update + install em uma camada só (melhor prática)
+# Update + install
 RUN apt-get update && apt-get upgrade -y && \
     apt-get install -y \
     build-essential \
