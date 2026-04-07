@@ -1,39 +1,42 @@
 FROM debian:bullseye
 
-# Update package manager
-RUN apt-get update
-RUN apt-get upgrade -y
+# Evita prompts interativos
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Has stuff like gcc, make, and libc6-dev
-RUN apt-get install -y build-essential automake libcapstone-dev libsqlite3-dev wget unzip
+# Update + install em uma camada só (melhor prática)
+RUN apt-get update && apt-get upgrade -y && \
+    apt-get install -y \
+    build-essential \
+    automake \
+    libcapstone-dev \
+    libsqlite3-dev \
+    wget \
+    unzip \
+    gcc-multilib && \
+    rm -rf /var/lib/apt/lists/*
 
-# Add support for i386 on an amd64 platform
-RUN dpkg --add-architecture i386
-RUN apt-get update
-RUN apt-get install --yes --no-install-recommends gcc-multilib
+# Add suporte i386
+RUN dpkg --add-architecture i386 && apt-get update
 
-# Get Tracer
-# RUN wget 'https://github.com/SideChannelMarvels/Tracer/archive/refs/heads/master.zip'
-COPY ../Tracer-master.zip .
-RUN unzip Tracer-master.zip
-
-# Get Valgrind 3.15.0
-# RUN wget 'https://sourceware.org/ftp/valgrind/valgrind-3.15.0.tar.bz2'
+# Copiar arquivos locais (DEVEM estar na mesma pasta do build)
+COPY Tracer-master.zip .
 COPY valgrind-3.15.0.tar.bz2 .
+
+# Extrair arquivos
+RUN unzip Tracer-master.zip
 RUN tar xf valgrind-3.15.0.tar.bz2
 
-# Apply the patch
+# Aplicar patch
 RUN cp -r Tracer-master/TracerGrind/tracergrind valgrind-3.15.0/
-RUN cp -r Tracer-master/TracerGrind/valgrind-3.15.0.diff .
+RUN cp Tracer-master/TracerGrind/valgrind-3.15.0.diff .
 RUN patch -p0 < valgrind-3.15.0.diff
 
-# Build and install Valgrind
-WORKDIR valgrind-3.15.0/
-RUN ./autogen.sh
-RUN ./configure --prefix=/usr
-RUN make
-RUN make install
+# Build
+WORKDIR /valgrind-3.15.0/
+RUN ./autogen.sh && \
+    ./configure --prefix=/usr && \
+    make && \
+    make install
 
-# Run it as if it were valgrind
 ENTRYPOINT ["valgrind"]
 CMD ["--help"]
