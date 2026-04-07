@@ -2,7 +2,7 @@ FROM debian:bullseye
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Add suporte i386 + instalar tudo
+# Add suporte i386 + install
 RUN dpkg --add-architecture i386 && apt-get update && \
     apt-get upgrade -y && \
     apt-get install -y \
