@@ -1,26 +1,31 @@
-FROM debian:stable
+FROM debian:bullseye
 
-# Update package manager
-RUN apt-get update
-RUN apt-get upgrade -y
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Has stuff like gcc, make, and libc6-dev
-RUN apt-get install -y build-essential automake libcapstone-dev libsqlite3-dev wget unzip
+# Add suporte i386 + instalar tudo
+RUN dpkg --add-architecture i386 && apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y \
+    build-essential \
+    automake \
+    libcapstone-dev \
+    libsqlite3-dev \
+    wget \
+    unzip \
+    gcc-multilib && \
+    rm -rf /var/lib/apt/lists/*
 
-# Add support for i386 on an amd64 platform
-RUN dpkg --add-architecture i386
-RUN apt-get update
-RUN apt-get install --yes --no-install-recommends gcc-multilib
+# Copiar arquivos (devem estar no diretório do build)
+COPY Tracer-master.zip .
 
-# Get Tracer
-# RUN wget 'https://github.com/SideChannelMarvels/Tracer/archive/refs/heads/master.zip'
-COPY ../Tracer-master.zip .
+# Extrair
 RUN unzip Tracer-master.zip
 
-# Build and install texttrace
-WORKDIR Tracer-master/TracerGrind/texttrace/
-RUN make
-RUN make install
+# Build
+WORKDIR /Tracer-master/TracerGrind/texttrace/
+RUN make && make install
 
 WORKDIR /home
+
 ENTRYPOINT ["texttrace"]
+CMD ["--help"]
